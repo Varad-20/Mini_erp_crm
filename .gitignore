@@ -111,3 +111,8 @@ backend/.env
 
 # Vite output
 frontend/dist
+
+# AI Agents
+.agents/
+.claude/
+.windsurf/
