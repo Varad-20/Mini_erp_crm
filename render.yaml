@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: mini-erp-crm-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install --include=dev && npx prisma generate && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "20"
+      - key: PORT
+        value: "5000"
+      - key: CORS_ORIGIN
+        sync: false # Set this in the Render dashboard to your Vercel URL
+      - key: DATABASE_URL
+        sync: false # Set this in the Render dashboard
+      - key: JWT_SECRET
+        generateValue: true # Render will automatically generate a secure secret
