@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../config/prisma";
 import { AuthRequest } from "../middleware/authMiddleware";
 import {
@@ -176,3 +176,4 @@ export const createFollowUp = async (req: AuthRequest, res: Response) => {
 
   return successResponse(res, followUp, "Follow-up created successfully", 201);
 };
+

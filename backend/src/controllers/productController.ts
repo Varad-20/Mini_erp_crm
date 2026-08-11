@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../config/prisma";
 import { AuthRequest } from "../middleware/authMiddleware";
 import { createProductSchema, updateProductSchema } from "../validators";
@@ -150,3 +150,4 @@ export const getCategories = async (_req: AuthRequest, res: Response) => {
   });
   return successResponse(res, categories.map((c) => c.category));
 };
+
