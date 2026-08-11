@@ -44,7 +44,7 @@ const CustomersPage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [viewingCustomer, setViewingCustomer] = useState<Customer | null>(null);
 
   const { data, isLoading } = useQuery({
@@ -77,7 +77,7 @@ const CustomersPage: React.FC = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: CustomerFormData }) =>
+    mutationFn: ({ id, data }: { id: string; data: CustomerFormData }) =>
       customerService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['customers'] });
@@ -421,3 +421,4 @@ const CustomersPage: React.FC = () => {
 };
 
 export default CustomersPage;
+

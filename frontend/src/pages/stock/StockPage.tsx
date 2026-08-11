@@ -53,7 +53,7 @@ const StockPage: React.FC = () => {
   const moveMutation = useMutation({
     mutationFn: (d: { productId: string; quantity: string; movementType: 'IN' | 'OUT'; reason: string }) =>
       stockService.createMovement({
-        productId: Number(d.productId),
+        productId: d.productId,
         quantity: Number(d.quantity),
         movementType: d.movementType,
         reason: d.reason,
@@ -344,3 +344,4 @@ const StockPage: React.FC = () => {
 };
 
 export default StockPage;
+

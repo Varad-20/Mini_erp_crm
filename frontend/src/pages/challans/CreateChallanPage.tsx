@@ -14,7 +14,7 @@ import { useAppToast } from '../../components/layout/Layout';
 import { formatCurrency, getApiErrorMessage } from '../../utils/formatters';
 
 interface LineItem {
-  productId: number;
+  productId: string;
   quantity: number;
   productName: string;
   sku: string;
@@ -55,7 +55,7 @@ const CreateChallanPage: React.FC = () => {
   const createMutation = useMutation({
     mutationFn: (status: 'DRAFT' | 'CONFIRMED') =>
       challanService.create({
-        customerId: Number(customerId),
+        customerId: customerId,
         items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
         status,
       }),
@@ -93,7 +93,7 @@ const CreateChallanPage: React.FC = () => {
     setItems((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const updateItem = (index: number, productId: number) => {
+  const updateItem = (index: number, productId: string) => {
     const product = products.find((p) => p.id === productId);
     if (!product) return;
     setItems((prev) =>
@@ -192,7 +192,7 @@ const CreateChallanPage: React.FC = () => {
                         <td className="table-cell min-w-48">
                           <select
                             value={item.productId}
-                            onChange={(e) => updateItem(index, Number(e.target.value))}
+                            onChange={(e) => updateItem(index, e.target.value)}
                             className="input-field text-sm py-1.5"
                           >
                             {products.map((p) => (
@@ -289,3 +289,4 @@ const CreateChallanPage: React.FC = () => {
 };
 
 export default CreateChallanPage;
+

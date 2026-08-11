@@ -167,5 +167,6 @@ export interface ProductQueryParams extends PaginationParams {
 export interface ChallanQueryParams extends PaginationParams {
   search?: string;
   status?: ChallanStatus | '';
-  customerId?: number;
+  customerId?: string;
 }
+

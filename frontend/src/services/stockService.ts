@@ -12,8 +12,9 @@ export const stockService = {
     return res.data;
   },
 
-  createMovement: async (data: { productId: number; quantity: number; movementType: 'IN' | 'OUT'; reason: string }): Promise<ApiResponse> => {
+  createMovement: async (data: { productId: string; quantity: number; movementType: 'IN' | 'OUT'; reason: string }): Promise<ApiResponse> => {
     const res = await api.post('/api/stock/movements', data);
     return res.data;
   },
 };
+

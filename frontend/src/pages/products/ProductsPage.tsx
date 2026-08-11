@@ -81,7 +81,7 @@ const ProductsPage: React.FC = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: ProductFormData }) => productService.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: ProductFormData }) => productService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
@@ -385,3 +385,4 @@ const ProductsPage: React.FC = () => {
 };
 
 export default ProductsPage;
+

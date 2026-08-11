@@ -2,8 +2,8 @@ import api from './api';
 import type { Challan, ChallanQueryParams, PaginatedResponse, ApiResponse } from '../types';
 
 export interface CreateChallanData {
-  customerId: number;
-  items: Array<{ productId: number; quantity: number }>;
+  customerId: string;
+  items: Array<{ productId: string; quantity: number }>;
   status: 'DRAFT' | 'CONFIRMED';
 }
 
@@ -13,7 +13,7 @@ export const challanService = {
     return res.data;
   },
 
-  getById: async (id: number): Promise<ApiResponse<Challan>> => {
+  getById: async (id: string): Promise<ApiResponse<Challan>> => {
     const res = await api.get(`/api/challans/${id}`);
     return res.data;
   },
@@ -23,18 +23,19 @@ export const challanService = {
     return res.data;
   },
 
-  update: async (id: number, data: Partial<CreateChallanData>): Promise<ApiResponse<Challan>> => {
+  update: async (id: string, data: Partial<CreateChallanData>): Promise<ApiResponse<Challan>> => {
     const res = await api.put(`/api/challans/${id}`, data);
     return res.data;
   },
 
-  confirm: async (id: number): Promise<ApiResponse<Challan>> => {
+  confirm: async (id: string): Promise<ApiResponse<Challan>> => {
     const res = await api.post(`/api/challans/${id}/confirm`);
     return res.data;
   },
 
-  cancel: async (id: number): Promise<ApiResponse<Challan>> => {
+  cancel: async (id: string): Promise<ApiResponse<Challan>> => {
     const res = await api.post(`/api/challans/${id}/cancel`);
     return res.data;
   },
 };
+

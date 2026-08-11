@@ -25,12 +25,12 @@ const ChallanDetailPage: React.FC = () => {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['challan', id],
-    queryFn: () => challanService.getById(Number(id)),
+    queryFn: () => challanService.getById(id!),
     enabled: !!id,
   });
 
   const confirmMutation = useMutation({
-    mutationFn: () => challanService.confirm(Number(id)),
+    mutationFn: () => challanService.confirm(id!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['challan', id] });
       queryClient.invalidateQueries({ queryKey: ['challans'] });
@@ -46,7 +46,7 @@ const ChallanDetailPage: React.FC = () => {
   });
 
   const cancelMutation = useMutation({
-    mutationFn: () => challanService.cancel(Number(id)),
+    mutationFn: () => challanService.cancel(id!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['challan', id] });
       queryClient.invalidateQueries({ queryKey: ['challans'] });
@@ -254,3 +254,4 @@ const ChallanDetailPage: React.FC = () => {
 };
 
 export default ChallanDetailPage;
+

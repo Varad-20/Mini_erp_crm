@@ -61,7 +61,7 @@ const UsersPage: React.FC = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: { id: number; data: UpdateUserForm }) => userService.updateUser(data.id, data.data),
+    mutationFn: (data: { id: string; data: UpdateUserForm }) => userService.updateUser(data.id, data.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('User updated successfully');
@@ -73,7 +73,7 @@ const UsersPage: React.FC = () => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => userService.deleteUser(id),
+    mutationFn: (id: string) => userService.deleteUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('User deleted successfully');
@@ -373,3 +373,4 @@ const UsersPage: React.FC = () => {
 };
 
 export default UsersPage;
+

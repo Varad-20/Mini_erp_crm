@@ -24,7 +24,7 @@ const CustomerDetailPage: React.FC = () => {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['customer', id],
-    queryFn: () => customerService.getById(Number(id)),
+    queryFn: () => customerService.getById(id!),
     enabled: !!id,
   });
 
@@ -32,7 +32,7 @@ const CustomerDetailPage: React.FC = () => {
 
   const followUpMutation = useMutation({
     mutationFn: (d: { followUpDate: string; notes: string }) =>
-      customerService.createFollowUp(Number(id), d),
+      customerService.createFollowUp(id!, d),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['customer', id] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
@@ -265,3 +265,5 @@ const CustomerDetailPage: React.FC = () => {
 };
 
 export default CustomerDetailPage;
+
+

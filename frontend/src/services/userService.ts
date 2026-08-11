@@ -12,13 +12,14 @@ export const userService = {
     return res.data;
   },
   
-  updateUser: async (id: number, data: any): Promise<ApiResponse<User>> => {
+  updateUser: async (id: string, data: any): Promise<ApiResponse<User>> => {
     const res = await api.put(`/api/users/${id}`, data);
     return res.data;
   },
 
-  deleteUser: async (id: number): Promise<ApiResponse<null>> => {
+  deleteUser: async (id: string): Promise<ApiResponse<null>> => {
     const res = await api.delete(`/api/users/${id}`);
     return res.data;
   }
 };
+

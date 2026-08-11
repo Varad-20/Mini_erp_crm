@@ -7,7 +7,7 @@ export const productService = {
     return res.data;
   },
 
-  getById: async (id: number): Promise<ApiResponse<Product>> => {
+  getById: async (id: string): Promise<ApiResponse<Product>> => {
     const res = await api.get(`/api/products/${id}`);
     return res.data;
   },
@@ -17,12 +17,12 @@ export const productService = {
     return res.data;
   },
 
-  update: async (id: number, data: Partial<Product>): Promise<ApiResponse<Product>> => {
+  update: async (id: string, data: Partial<Product>): Promise<ApiResponse<Product>> => {
     const res = await api.put(`/api/products/${id}`, data);
     return res.data;
   },
 
-  delete: async (id: number): Promise<ApiResponse> => {
+  delete: async (id: string): Promise<ApiResponse> => {
     const res = await api.delete(`/api/products/${id}`);
     return res.data;
   },
@@ -32,3 +32,4 @@ export const productService = {
     return res.data;
   },
 };
+
