@@ -5,7 +5,7 @@ import {
   createStockMovement,
 } from "../controllers/stockController";
 import { authenticate, authorize } from "../middleware/authMiddleware";
-import { UserRole } from "../generated/prisma/client";
+import { UserRole } from '../types/enums';
 
 const router = Router();
 

@@ -32,12 +32,12 @@ export const getStockMovements = async (req: AuthRequest, res: Response) => {
   const page = Math.max(1, parseInt(req.query.page as string) || 1);
   const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 20));
   const productId = req.query.productId
-    ? parseInt(req.query.productId as string)
+    ? req.query.productId as string
     : undefined;
   const movementType = req.query.type as string | undefined;
 
   const where: Record<string, unknown> = {};
-  if (productId && !isNaN(productId)) where.productId = productId;
+  if (productId) where.productId = productId;
   if (movementType === "IN" || movementType === "OUT") where.movementType = movementType;
 
   const [total, movements] = await Promise.all([

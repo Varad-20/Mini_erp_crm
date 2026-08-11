@@ -1,48 +1,29 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  ADMIN
-  SALES
-  WAREHOUSE
-  ACCOUNTS
-}
 
-enum CustomerType {
-  RETAIL
-  WHOLESALE
-  DISTRIBUTOR
-}
 
-enum CustomerStatus {
-  LEAD
-  ACTIVE
-  INACTIVE
-}
 
-enum StockMovementType {
-  IN
-  OUT
-}
 
-enum ChallanStatus {
-  DRAFT
-  CONFIRMED
-  CANCELLED
-}
+
+
+
+
+
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(cuid())
   name         String
   email        String   @unique
   passwordHash String
-  role         UserRole @default(SALES)
+  role         String @default("SALES")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -55,22 +36,22 @@ model User {
 }
 
 model Customer {
-  id           Int            @id @default(autoincrement())
+  id           String         @id @default(cuid())
   name         String
   mobile       String
   email        String?
   businessName String
   gstNumber    String?
-  customerType CustomerType
+  customerType String
   address      String
-  status       CustomerStatus @default(LEAD)
+  status       String @default("LEAD")
   followUpDate DateTime?
   notes        String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  createdBy   User? @relation(fields: [createdById], references: [id])
-  createdById Int?
+  createdBy   User?   @relation(fields: [createdById], references: [id])
+  createdById String?
 
   followUps FollowUp[]
   challans  Challan[]
@@ -81,27 +62,27 @@ model Customer {
 }
 
 model FollowUp {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(cuid())
   followUpDate DateTime
   notes        String
   createdAt    DateTime @default(now())
 
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  customerId Int
+  customerId String  
 
-  createdBy   User @relation(fields: [createdById], references: [id])
-  createdById Int
+  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdById String
 
   @@index([customerId])
   @@index([followUpDate])
 }
 
 model Product {
-  id                Int      @id @default(autoincrement())
+  id                String   @id @default(cuid())
   name              String
   sku               String   @unique
   category          String
-  unitPrice         Decimal  @db.Decimal(10, 2)
+  unitPrice         Float
   currentStock      Int      @default(0)
   minimumStock      Int      @default(0)
   warehouseLocation String
@@ -116,35 +97,35 @@ model Product {
 }
 
 model StockMovement {
-  id           Int               @id @default(autoincrement())
+  id           String            @id @default(cuid())
   quantity     Int
-  movementType StockMovementType
+  movementType String
   reason       String
   createdAt    DateTime          @default(now())
 
   product   Product @relation(fields: [productId], references: [id])
-  productId Int
+  productId String 
 
-  createdBy   User @relation(fields: [createdById], references: [id])
-  createdById Int
+  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdById String
 
   @@index([productId])
   @@index([createdAt])
 }
 
 model Challan {
-  id            Int           @id @default(autoincrement())
+  id            String        @id @default(cuid())
   challanNumber String        @unique
   totalQuantity Int           @default(0)
-  status        ChallanStatus @default(DRAFT)
+  status        String @default("DRAFT")
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
   customer   Customer @relation(fields: [customerId], references: [id])
-  customerId Int
+  customerId String  
 
-  createdBy   User @relation(fields: [createdById], references: [id])
-  createdById Int
+  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdById String
 
   items ChallanItem[]
 
@@ -154,18 +135,20 @@ model Challan {
 }
 
 model ChallanItem {
-  id          Int     @id @default(autoincrement())
+  id          String @id @default(cuid())
   quantity    Int
   productName String
   sku         String
-  unitPrice   Decimal @db.Decimal(10, 2)
+  unitPrice   Float
 
   challan   Challan @relation(fields: [challanId], references: [id], onDelete: Cascade)
-  challanId Int
+  challanId String 
 
   product   Product @relation(fields: [productId], references: [id])
-  productId Int
+  productId String 
 
   @@index([challanId])
   @@index([productId])
 }
+
+

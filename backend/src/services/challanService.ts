@@ -2,15 +2,15 @@ import { prisma } from "../config/prisma";
 import { generateChallanNumber } from "../utils/challanNumber";
 
 interface ChallanItemInput {
-  productId: number;
+  productId: string;
   quantity: number;
 }
 
 interface CreateChallanInput {
-  customerId: number;
+  customerId: string;
   items: ChallanItemInput[];
   status: "DRAFT" | "CONFIRMED";
-  createdById: number;
+  createdById: string;
 }
 
 /**
@@ -147,7 +147,7 @@ export const createChallanWithItems = async (input: CreateChallanInput) => {
  * Validates stock → deducts → creates OUT movements → updates status.
  * ALL steps happen in one transaction. If any step fails, nothing is committed.
  */
-export const confirmChallanById = async (challanId: number, confirmedByUserId: number) => {
+export const confirmChallanById = async (challanId: string, confirmedByUserId: string) => {
   return await prisma.$transaction(async (tx) => {
     // 1. Load challan with items
     const challan = await tx.challan.findUnique({
@@ -210,7 +210,7 @@ export const confirmChallanById = async (challanId: number, confirmedByUserId: n
  * Cancels a challan. Only DRAFT challans can be cancelled.
  * CONFIRMED challans cannot be cancelled (stock has already been deducted).
  */
-export const cancelChallanById = async (challanId: number) => {
+export const cancelChallanById = async (challanId: string) => {
   const challan = await prisma.challan.findUnique({ where: { id: challanId } });
   if (!challan) throw new Error("CHALLAN_NOT_FOUND");
   if (challan.status === "CANCELLED") throw new Error("CHALLAN_ALREADY_CANCELLED");

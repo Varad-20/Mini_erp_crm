@@ -52,17 +52,17 @@ export const getChallans = async (req: AuthRequest, res: Response) => {
   const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 10));
   const status = req.query.status as string | undefined;
   const customerId = req.query.customerId
-    ? parseInt(req.query.customerId as string)
+    ? req.query.customerId as string
     : undefined;
   const search = (req.query.search as string) || "";
 
   const where: Record<string, unknown> = {};
   if (status) where.status = status;
-  if (customerId && !isNaN(customerId)) where.customerId = customerId;
+  if (customerId) where.customerId = customerId;
   if (search) {
     where.OR = [
-      { challanNumber: { contains: search, mode: "insensitive" } },
-      { customer: { name: { contains: search, mode: "insensitive" } } },
+      { challanNumber: { contains: search } },
+      { customer: { name: { contains: search } } },
     ];
   }
 
@@ -90,8 +90,8 @@ export const getChallans = async (req: AuthRequest, res: Response) => {
 };
 
 export const getChallanById = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid challan ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid challan ID", 400);
 
   const challan = await prisma.challan.findUnique({
     where: { id },
@@ -103,8 +103,8 @@ export const getChallanById = async (req: AuthRequest, res: Response) => {
 };
 
 export const updateChallan = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid challan ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid challan ID", 400);
 
   const challan = await prisma.challan.findUnique({
     where: { id },
@@ -116,8 +116,8 @@ export const updateChallan = async (req: AuthRequest, res: Response) => {
   }
 
   const { customerId, items } = req.body as {
-    customerId?: number;
-    items?: Array<{ productId: number; quantity: number }>;
+    customerId?: string;
+    items?: Array<{ productId: string; quantity: number }>;
   };
 
   try {
@@ -173,8 +173,8 @@ export const updateChallan = async (req: AuthRequest, res: Response) => {
 };
 
 export const confirmChallan = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid challan ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid challan ID", 400);
 
   try {
     const challan = await confirmChallanById(id, req.user!.userId);
@@ -200,8 +200,8 @@ export const confirmChallan = async (req: AuthRequest, res: Response) => {
 };
 
 export const cancelChallan = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid challan ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid challan ID", 400);
 
   try {
     const challan = await cancelChallanById(id);

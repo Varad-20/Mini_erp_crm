@@ -3,7 +3,7 @@
 export type UserRole = 'ADMIN' | 'SALES' | 'WAREHOUSE' | 'ACCOUNTS';
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: UserRole;
@@ -21,7 +21,7 @@ export type CustomerType = 'RETAIL' | 'WHOLESALE' | 'DISTRIBUTOR';
 export type CustomerStatus = 'LEAD' | 'ACTIVE' | 'INACTIVE';
 
 export interface Customer {
-  id: number;
+  id: string;
   name: string;
   mobile: string;
   email?: string | null;
@@ -34,25 +34,25 @@ export interface Customer {
   notes?: string | null;
   createdAt: string;
   updatedAt: string;
-  createdById?: number | null;
-  createdBy?: { id: number; name: string } | null;
+  createdById?: string | null;
+  createdBy?: { id: string; name: string } | null;
   followUps?: FollowUp[];
 }
 
 export interface FollowUp {
-  id: number;
-  customerId: number;
+  id: string;
+  customerId: string;
   followUpDate: string;
   notes: string;
   createdAt: string;
-  createdById: number;
-  createdBy?: { id: number; name: string };
+  createdById: string;
+  createdBy?: { id: string; name: string };
 }
 
 // ─── Product ──────────────────────────────────────────────────────────────────
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   sku: string;
   category: string;
@@ -70,15 +70,15 @@ export interface Product {
 export type StockMovementType = 'IN' | 'OUT';
 
 export interface StockMovement {
-  id: number;
-  productId: number;
+  id: string;
+  productId: string;
   quantity: number;
   movementType: StockMovementType;
   reason: string;
   createdAt: string;
-  createdById: number;
-  product?: { id: number; name: string; sku: string };
-  createdBy?: { id: number; name: string };
+  createdById: string;
+  product?: { id: string; name: string; sku: string };
+  createdBy?: { id: string; name: string };
 }
 
 // ─── Challan ──────────────────────────────────────────────────────────────────
@@ -86,9 +86,9 @@ export interface StockMovement {
 export type ChallanStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELLED';
 
 export interface ChallanItem {
-  id: number;
-  challanId: number;
-  productId: number;
+  id: string;
+  challanId: string;
+  productId: string;
   productName: string;
   sku: string;
   unitPrice: number;
@@ -97,16 +97,16 @@ export interface ChallanItem {
 }
 
 export interface Challan {
-  id: number;
+  id: string;
   challanNumber: string;
-  customerId: number;
+  customerId: string;
   totalQuantity: number;
   status: ChallanStatus;
   createdAt: string;
   updatedAt: string;
-  createdById: number;
-  customer?: { id: number; name: string; businessName: string };
-  createdBy?: { id: number; name: string };
+  createdById: string;
+  customer?: { id: string; name: string; businessName: string };
+  createdBy?: { id: string; name: string };
   items?: ChallanItem[];
 }
 

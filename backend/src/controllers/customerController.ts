@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Prisma } from "../generated/prisma/client";
+import { Prisma } from "../generated/prisma";
 import { prisma } from "../config/prisma";
 import { AuthRequest } from "../middleware/authMiddleware";
 import {
@@ -49,10 +49,10 @@ export const getCustomers = async (req: AuthRequest, res: Response) => {
 
   if (search) {
     where.OR = [
-      { name: { contains: search, mode: Prisma.QueryMode.insensitive } },
-      { businessName: { contains: search, mode: Prisma.QueryMode.insensitive } },
-      { mobile: { contains: search, mode: Prisma.QueryMode.insensitive } },
-      { email: { contains: search, mode: Prisma.QueryMode.insensitive } },
+      { name: { contains: search } },
+      { businessName: { contains: search } },
+      { mobile: { contains: search } },
+      { email: { contains: search } },
     ];
   }
   if (status) where.status = status as Prisma.CustomerWhereInput["status"];
@@ -78,8 +78,8 @@ export const getCustomers = async (req: AuthRequest, res: Response) => {
 };
 
 export const getCustomerById = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid customer ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid customer ID", 400);
 
   const customer = await prisma.customer.findUnique({
     where: { id },
@@ -97,8 +97,8 @@ export const getCustomerById = async (req: AuthRequest, res: Response) => {
 };
 
 export const updateCustomer = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid customer ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid customer ID", 400);
 
   const parsed = updateCustomerSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -134,8 +134,8 @@ export const updateCustomer = async (req: AuthRequest, res: Response) => {
 };
 
 export const deleteCustomer = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid customer ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid customer ID", 400);
 
   const existing = await prisma.customer.findUnique({ where: { id } });
   if (!existing) return errorResponse(res, "Customer not found", 404);
@@ -145,8 +145,8 @@ export const deleteCustomer = async (req: AuthRequest, res: Response) => {
 };
 
 export const createFollowUp = async (req: AuthRequest, res: Response) => {
-  const customerId = parseInt(req.params.id as string);
-  if (isNaN(customerId)) return errorResponse(res, "Invalid customer ID", 400);
+  const customerId = req.params.id as string;
+  if (!customerId) return errorResponse(res, "Invalid customer ID", 400);
 
   const parsed = createFollowUpSchema.safeParse(req.body);
   if (!parsed.success) {

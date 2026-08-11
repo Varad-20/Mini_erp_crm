@@ -62,7 +62,7 @@ export const updateProductSchema = createProductSchema.partial();
 // ─── Stock Movement Validators ─────────────────────────────────────────────────
 
 export const createStockMovementSchema = z.object({
-  productId: z.coerce.number({ error: "Product ID must be a number" }).int().positive(),
+  productId: z.string().min(1, "Product ID is required"),
   quantity: z.coerce
     .number({ error: "Quantity must be a number" })
     .int("Quantity must be a whole number")
@@ -74,7 +74,7 @@ export const createStockMovementSchema = z.object({
 // ─── Challan Validators ────────────────────────────────────────────────────────
 
 export const challanItemSchema = z.object({
-  productId: z.coerce.number({ error: "Product ID must be a number" }).int().positive(),
+  productId: z.string().min(1, "Product ID is required"),
   quantity: z.coerce
     .number({ error: "Quantity must be a number" })
     .int("Quantity must be a whole number")
@@ -82,12 +82,12 @@ export const challanItemSchema = z.object({
 });
 
 export const createChallanSchema = z.object({
-  customerId: z.coerce.number({ error: "Customer ID must be a number" }).int().positive(),
+  customerId: z.string().min(1, "Customer ID is required"),
   items: z.array(challanItemSchema).min(1, "At least one item is required"),
   status: z.enum(["DRAFT", "CONFIRMED"]).default("DRAFT"),
 });
 
 export const updateChallanSchema = z.object({
-  customerId: z.coerce.number().int().positive().optional(),
+  customerId: z.string().optional(),
   items: z.array(challanItemSchema).min(1).optional(),
 });

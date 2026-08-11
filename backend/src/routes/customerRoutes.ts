@@ -8,7 +8,7 @@ import {
   createFollowUp,
 } from "../controllers/customerController";
 import { authenticate, authorize } from "../middleware/authMiddleware";
-import { UserRole } from "../generated/prisma/client";
+import { UserRole } from '../types/enums';
 
 const router = Router();
 

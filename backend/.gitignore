@@ -5,3 +5,7 @@
 .agents/
 .claude/
 .windsurf/
+
+# SQLite Local Database
+dev.db
+*.db

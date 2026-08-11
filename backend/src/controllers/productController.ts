@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Prisma } from "../generated/prisma/client";
+import { Prisma } from "../generated/prisma";
 import { prisma } from "../config/prisma";
 import { AuthRequest } from "../middleware/authMiddleware";
 import { createProductSchema, updateProductSchema } from "../validators";
@@ -44,13 +44,13 @@ export const getProducts = async (req: AuthRequest, res: Response) => {
 
   if (search) {
     where.OR = [
-      { name: { contains: search, mode: Prisma.QueryMode.insensitive } },
-      { sku: { contains: search, mode: Prisma.QueryMode.insensitive } },
-      { category: { contains: search, mode: Prisma.QueryMode.insensitive } },
+      { name: { contains: search } },
+      { sku: { contains: search } },
+      { category: { contains: search } },
     ];
   }
   if (category) {
-    where.category = { equals: category, mode: Prisma.QueryMode.insensitive };
+    where.category = { equals: category };
   }
 
   const [allProducts] = await Promise.all([
@@ -83,8 +83,8 @@ export const getProducts = async (req: AuthRequest, res: Response) => {
 };
 
 export const getProductById = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid product ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid product ID", 400);
 
   const product = await prisma.product.findUnique({ where: { id } });
   if (!product) return errorResponse(res, "Product not found", 404);
@@ -97,8 +97,8 @@ export const getProductById = async (req: AuthRequest, res: Response) => {
 };
 
 export const updateProduct = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid product ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid product ID", 400);
 
   const parsed = updateProductSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -132,8 +132,8 @@ export const updateProduct = async (req: AuthRequest, res: Response) => {
 };
 
 export const deleteProduct = async (req: AuthRequest, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id)) return errorResponse(res, "Invalid product ID", 400);
+  const id = req.params.id as string;
+  if (!id) return errorResponse(res, "Invalid product ID", 400);
 
   const existing = await prisma.product.findUnique({ where: { id } });
   if (!existing) return errorResponse(res, "Product not found", 404);

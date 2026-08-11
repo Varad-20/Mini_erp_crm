@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { UserRole } from "../generated/prisma/client";
+import { UserRole } from '../types/enums';
 
 export interface AuthRequest extends Request {
   user?: {
-    userId: number;
+    userId: string;
     role: UserRole;
   };
 }
@@ -35,7 +35,7 @@ export const authenticate = (
     }
 
     const decoded = jwt.verify(token, jwtSecret) as {
-      userId: number;
+      userId: string;
       role: string;
     };
 

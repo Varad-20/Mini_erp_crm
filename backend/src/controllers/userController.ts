@@ -87,7 +87,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { name, email, password, role } = req.body;
 
     if (!name || !email || !role) {
@@ -98,7 +98,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: { id: Number(id) },
+      where: { id },
     });
 
     if (!existingUser) {
@@ -109,7 +109,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
     }
 
     const duplicateEmail = await prisma.user.findFirst({
-      where: { email, id: { not: Number(id) } },
+      where: { email, id: { not: id } },
     });
 
     if (duplicateEmail) {
@@ -131,7 +131,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
     }
 
     const updatedUser = await prisma.user.update({
-      where: { id: Number(id) },
+      where: { id },
       data: updateData,
       select: {
         id: true,
@@ -158,9 +158,9 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
 
 export const deleteUser = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
-    if (req.user?.userId === Number(id)) {
+    if (req.user?.userId === id) {
       return res.status(400).json({
         success: false,
         message: "You cannot delete your own account",
@@ -168,7 +168,7 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: { id: Number(id) },
+      where: { id },
     });
 
     if (!existingUser) {
@@ -179,7 +179,7 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
     }
 
     await prisma.user.delete({
-      where: { id: Number(id) },
+      where: { id },
     });
 
     return res.status(200).json({
